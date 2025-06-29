@@ -47,3 +47,33 @@ export const getUserById = async (req,res) => {
 }
 
 //Update the User by ID
+export const updateById = async (req,res) => {
+    try {
+        const {id}= req.params;
+        const userExists = await userModel.findById(id);
+        if(!userExists){
+            return res.status(404).json({message:"User not found"})
+        }
+        const updatedData = await userModel.findByIdAndUpdate(id, req.body,{new:true});
+        res.status(200).json(updatedData);
+
+    } catch (error) {
+        res.status(500).json({errorMessage:error.message});
+    }
+}
+
+//Delete the User By ID
+export const deleteUser = async (req,res) => {
+    try {
+        const {id}= req.params;
+        const userExists = await userModel.findById(id);
+        if(!userExists){
+            return res.status(404).json({message:"User not found"})
+        }
+        await userModel.findByIdAndDelete(id);
+        res.status(200).json({message:"User deleted successfully"});
+
+    } catch (error) {
+        res.status(500).json({errorMessage:error.message});
+    }
+}
