@@ -3,17 +3,25 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import userRoutes from './routes/userRoutes.js'
-
+import cors from 'cors';
 
 const app = express();
-app.use(bodyParser.json());
+
 dotenv.config();
+
+//Middleware
+app.use(cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true
+}));
+
+app.use(bodyParser.json());
+app.use('/api',userRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGODBURI = process.env.MONGODB_URI;
 
-//Middleware
-app.use('/api',userRoutes);
+
 
 //MongoDB Connection
 mongoose.connect(MONGODBURI)
@@ -24,4 +32,3 @@ mongoose.connect(MONGODBURI)
         })
     })
     .catch((error) => console.log(error))
-
