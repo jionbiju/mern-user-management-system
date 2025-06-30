@@ -5,14 +5,13 @@ export const create = async (req, res) => {
     try {
         const { name, email, phone, role } = req.body;
 
-        // Validation
         if (!name || !email || !phone) {
             return res.status(400).json({
                 message: "Name, email, and phone are required fields."
             });
         }
 
-        // Check if user already exists
+
         const userExist = await userModel.findOne({ email });
         if (userExist) {
             return res.status(400).json({
